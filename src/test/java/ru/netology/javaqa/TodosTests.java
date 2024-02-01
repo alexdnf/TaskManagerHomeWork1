@@ -95,5 +95,45 @@ public class TodosTests {
         Assertions.assertArrayEquals(expected, actual);
 
     }
+    @Test
+    public void shouldFindSeveralTasksByQuery() {
+        SimpleTask simpleTask = new SimpleTask(1, "Купить подписку на ПО");
+
+        String[] subtasks = {"Купить клавиатуру", "Купить мышку", "Купить зарядник"};
+        Epic epic = new Epic(6, subtasks);
+
+        Meeting meeting = new Meeting(9, "Собеседование", "Новая компания", "Четверг 10.00");
+
+        Todos todos = new Todos();
+
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {simpleTask, epic};
+        Task[] actual = todos.search("Купить");
+
+        Assertions.assertArrayEquals(expected, actual);
+
+    }
+    @Test public void shouldNotFindTasksByQuery() {
+        SimpleTask simpleTask = new SimpleTask(1, "Купить подписку на ПО");
+
+        String[] subtasks = {"Купить клавиатуру", "Купить мышку", "Купить зарядник"};
+        Epic epic = new Epic(6, subtasks);
+
+        Meeting meeting = new Meeting(9, "Собеседование", "Новая компания", "Четверг 10.00");
+
+        Todos todos = new Todos();
+
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {};
+        Task[] actual = todos.search("Выбрать");
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
 
 }
