@@ -5,13 +5,22 @@ import org.junit.jupiter.api.Test;
 
 public class TasksTest {
     @Test
-    public void shouldFindByQueryInSimpleTalk() {
+    public void shouldFindByQueryInSimpleTask() {
         SimpleTask simpleTask = new SimpleTask(5, "Позвонить родителям");
 
-        simpleTask.matches("Позвонить родителям");
+        boolean expected = true;
+        boolean actual = simpleTask.matches("Позвонить родителям");
 
-        String expected = "Позвонить родителям";
-        String actual = simpleTask.getTitle();
+        Assertions.assertEquals(expected, actual);
+
+    }
+
+    @Test
+    public void shouldNotFindByQueryInSimpleTask() {
+        SimpleTask simpleTask = new SimpleTask(5, "Позвонить родителям");
+
+        boolean expected = false;
+        boolean actual = simpleTask.matches("Сделать список покупок");
 
         Assertions.assertEquals(expected, actual);
 
@@ -22,47 +31,56 @@ public class TasksTest {
         String[] subtasks = {"Забрать телефон", "Выбрать чехол", "Выбрать наушники"};
         Epic epic = new Epic(8, subtasks);
 
-        epic.matches("Забрать телефон");
+        epic.getSubtasks();
 
-        String[] expected = {"Забрать телефон", "Выбрать чехол", "Выбрать наушники"};
-        String[] actual = epic.getSubtasks();
-
-        Assertions.assertArrayEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldFindByQueryInMeetingTopic() {
-        Meeting meeting = new Meeting(1, "Релиз новой версии", "Приложение для подсчета шагов", "Понедельник полдень");
-
-        meeting.matches("Релиз новой версии");
-
-        String expected = "Релиз новой версии";
-        String actual = meeting.getTopic();
+        boolean expected = true;
+        boolean actual = epic.matches("Выбрать наушники");
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldFindByQueryInMeetingProject() {
-        Meeting meeting = new Meeting(1, "Релиз новой версии", "Приложение для подсчета шагов", "Понедельник полдень");
+    public void shouldNotFindByQueryInEpic() {
+        String[] subtasks = {"Забрать телефон", "Выбрать чехол", "Выбрать наушники"};
+        Epic epic = new Epic(8, subtasks);
 
-        meeting.matches("Приложение для подсчета шагов");
+        epic.getSubtasks();
 
-        String expected = "Приложение для подсчета шагов";
-        String actual = meeting.getProject();
+        boolean expected = false;
+        boolean actual = epic.matches("Купить задярник");
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldFindByQueryInMeetingTimeStart() {
+    public void shouldFindByQueryInMeetingByTopic() {
         Meeting meeting = new Meeting(1, "Релиз новой версии", "Приложение для подсчета шагов", "Понедельник полдень");
 
-        meeting.matches("Понедельник полдень");
-
-        String expected = "Понедельник полдень";
-        String actual = meeting.getStart();
+        boolean expected = true;
+        boolean actual = meeting.matches("Релиз новой версии");
 
         Assertions.assertEquals(expected, actual);
     }
+
+    @Test
+    public void shouldFindByQueryInMeetingByProject() {
+        Meeting meeting = new Meeting(1, "Релиз новой версии", "Приложение для подсчета шагов", "Понедельник полдень");
+
+        boolean expected = true;
+        boolean actual = meeting.matches("Приложение для подсчета шагов");
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldNotFindByQueryInMeeting() {
+        Meeting meeting = new Meeting(1, "Релиз новой версии", "Приложение для подсчета шагов", "Понедельник полдень");
+
+        boolean expected = false;
+        boolean actual = meeting.matches("Тестирование требований");
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+
 }
